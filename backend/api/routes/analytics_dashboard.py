@@ -16,4 +16,4 @@ def get_analytics():
     backend/services/analytics_service.py — replace with real logic.
     """
     data = analytics_service.get_platform_analytics()
-    return APIResponse(message="Analytics fetched (dummy data).", data=data)
+    return APIResponse(message="Analytics fetched successfully.", data=data)

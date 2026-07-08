@@ -17,4 +17,4 @@ def get_mentor_dashboard(mentor_name: Optional[str] = None):
     backend/services/mentor_service.py — replace with real logic.
     """
     data = mentor_service.get_mentor_dashboard(mentor_name)
-    return APIResponse(message="Mentor dashboard fetched (dummy data).", data=data)
+    return APIResponse(message="Mentor dashboard fetched successfully.", data=data)

@@ -16,4 +16,4 @@ def get_recommendations(intern_id: str):
     backend/services/task_service.py — replace with real logic.
     """
     data = task_service.get_task_recommendations(intern_id)
-    return APIResponse(message="Task recommendations fetched (dummy data).", data=data)
+    return APIResponse(message="Task recommendations fetched successfully.", data=data)

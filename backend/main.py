@@ -26,6 +26,8 @@ from backend.api.routes import (
 from backend.api.routes import intern
 from backend.api.routes import task
 from backend.api.routes import submission
+from backend.api.routes import attendance_crud
+from backend.api.routes import analytics_dashboard
 
 
 app = FastAPI(
@@ -65,6 +67,7 @@ app.include_router(analytics_dashboard.router)
 app.include_router(intern.router)
 app.include_router(task.router)
 app.include_router(submission.router)
+app.include_router(attendance_crud.router)
 
 
 # -----------------------------

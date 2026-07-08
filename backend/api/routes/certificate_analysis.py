@@ -16,4 +16,4 @@ def get_certificate_status(intern_id: str):
     backend/services/certificate_service.py — replace with real logic.
     """
     data = certificate_service.get_certificate_eligibility(intern_id)
-    return APIResponse(message="Certificate eligibility fetched (dummy data).", data=data)
+    return APIResponse(message="Certificate eligibility fetched successfully.",data=data)

@@ -1,12 +1,13 @@
-from pydantic import BaseModel, ConfigDict
-from datetime import date
+from datetime import date as Date
+from typing import Optional
 
+from pydantic import BaseModel, ConfigDict
 
 class AttendanceBase(BaseModel):
     intern_id: str
-    date: date
+    date: Date
     status: str
-    remarks: str | None = None
+    remarks: Optional[str] = None
 
 
 class AttendanceCreate(AttendanceBase):
@@ -14,13 +15,12 @@ class AttendanceCreate(AttendanceBase):
 
 
 class AttendanceUpdate(BaseModel):
-    status: str | None = None
-    remarks: str | None = None
+    date: Optional[Date] = None
+    status: Optional[str] = None
+    remarks: Optional[str] = None
 
 
 class AttendanceResponse(AttendanceBase):
     attendance_id: int
 
-    model_config = ConfigDict(
-        from_attributes=True
-    )
+    model_config = ConfigDict(from_attributes=True)
