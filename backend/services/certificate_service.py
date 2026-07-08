@@ -69,12 +69,17 @@ def get_certificate_eligibility(intern_id: str) -> dict:
             .filter(GitHubActivity.intern_id == intern_id)
             .first()
         )
-
-        github_score = (
-            round(github.overall_score, 2)
-            if github
-            else 0
-        )
+        if github:
+            github_score = round(
+                (
+                    github.readme_score +
+                    github.documentation_score +
+                    github.code_quality_score
+                ) /3,
+                2
+            )
+        else:
+            github_score =0
 
         # ----------------------------
         # Mentor Score

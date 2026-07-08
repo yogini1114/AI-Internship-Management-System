@@ -1,40 +1,80 @@
-"""Streamlit page: Intern Profile — progress, attendance, task recommendations."""
-
 import streamlit as st
 from utils.api_client import get
 
 st.set_page_config(page_title="Intern Profile", page_icon="👤")
+
 st.title("👤 Intern Profile")
 
-intern_id = st.text_input("Enter Intern ID (e.g. INT-0001)", value="INT-0001")
+intern_id = st.text_input(
+    "Enter Intern ID",
+    value="INT-0001"
+)
 
 if st.button("Load Profile"):
-    col1, col2 = st.columns(2)
 
-    with col1:
-        st.subheader("📈 Progress")
-        progress = get(f"/api/progress/{intern_id}")
-        if progress and progress.get("data"):
-            st.json(progress["data"])
-        else:
-            st.warning("No data returned. Showing placeholder.")
-            st.json({"completion_percentage": 0, "note": "TODO: backend not returning real data yet."})
+    progress = get(f"/api/progress/{intern_id}")
+    attendance = get(f"/api/attendance/{intern_id}")
+    task = get(f"/api/task-recommendations/{intern_id}")
 
-    with col2:
-        st.subheader("🗓️ Attendance")
-        attendance = get(f"/api/attendance/{intern_id}")
-        if attendance and attendance.get("data"):
-            st.json(attendance["data"])
-        else:
-            st.warning("No data returned. Showing placeholder.")
-            st.json({"attendance_percentage_overall": 0, "note": "TODO: backend not returning real data yet."})
+    if progress and attendance:
 
-    st.subheader("🎯 Task Recommendations")
-    recs = get(f"/api/task-recommendations/{intern_id}")
-    if recs and recs.get("data"):
-        st.json(recs["data"])
+        p = progress["data"]
+        a = attendance["data"]
+
+        col1, col2, col3 = st.columns(3)
+
+        col1.metric(
+            "Progress",
+            f"{p['completion_percentage']}%"
+        )
+
+        col2.metric(
+            "Attendance",
+            f"{a['overall_attendance']}%"
+        )
+
+        col3.metric(
+            "Consistency",
+            f"{a['consistency_score']}"
+        )
+
+        st.divider()
+
+        st.subheader("Attendance Trend")
+
+        st.progress(
+            a["overall_attendance"] / 100
+        )
+
+        st.write("Trend :", a["trend"])
+
+        st.divider()
+
+        st.subheader("Recommended Skills")
+
+        if task:
+
+            t = task["data"]
+
+            st.write("Weak Skills")
+
+            for skill in t["weak_skills"]:
+                st.error(skill)
+
+            st.write("Courses")
+
+            for course in t["recommended_courses"]:
+                st.success(course)
+
+            st.write("Projects")
+
+            for project in t["recommended_projects"]:
+                st.info(project)
+
+            st.write("Practice Tasks")
+
+            for practice in t["recommended_practice_tasks"]:
+                st.warning(practice)
+
     else:
-        st.warning("No data returned. Showing placeholder.")
-
-# TODO (Interns): Replace text_input with a dropdown populated from
-# GET /api/mentor-dashboard or a dedicated /api/interns list endpoint.
+        st.error("Intern not found.")
